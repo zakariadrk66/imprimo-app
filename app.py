@@ -1,23 +1,20 @@
 # app.py
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import Config
+from extensions import db  # ✅ Importer db depuis extensions
 
-db = SQLAlchemy()
 login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    db.init_app(app)  # ✅ Initialisation ici
+    db.init_app(app)  # ✅ Initialiser avec l'instance unique de db
     login_manager.init_app(app)
     login_manager.login_view = 'login'
 
-    # ✅ Importer les modèles APRÈS db.init_app(app)
-    from models import User, Order, AuditLog  # 👈 Important !
-
+    from models import User, Order, AuditLog  # ✅ Importer les modèles
     from routes import main
     app.register_blueprint(main)
 

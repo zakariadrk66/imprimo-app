@@ -1,8 +1,7 @@
 # models.py
-from flask_sqlalchemy import SQLAlchemy
+from extensions import db  # ✅ Importer db depuis extensions
 from sqlalchemy import func
 from flask_login import UserMixin
-
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
