@@ -9,16 +9,16 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
-    # ✅ Initialiser login_manager avant db
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'main.login'
 
-    # ✅ Définir le user_loader ici
+    #  ✅ Définir le user_loader ici
     @login_manager.user_loader
     def load_user(user_id):
+        # ⚠️ CORRIGÉ : Utiliser db.session.get au lieu de User.query.get
         from models import User
-        return User.query.get(int(user_id))
+        return db.session.get(User, int(user_id))
 
     db.init_app(app)
 

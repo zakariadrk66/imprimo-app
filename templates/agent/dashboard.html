@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2><i class="fas fa-tachometer-alt"></i> Dashboard Agent</h2>
+        <p>Bienvenue, {{ current_user.email }}</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-print"></i> Créer une Commande</h5>
+                <p class="card-text">Créer une nouvelle commande d'impression</p>
+                <a href="{{ url_for('main.create_order') }}" class="btn btn-primary">Créer</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-history"></i> Historique des Commandes</h5>
+                <p class="card-text">Voir l'historique des commandes créées</p>
+<a href="{{ url_for('main.create_order') }}" class="btn btn-primary">Créer</a>            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

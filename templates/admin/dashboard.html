@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2><i class="fas fa-tachometer-alt"></i> Dashboard Administrateur</h2>
+        <p>Bienvenue, {{ current_user.email }}</p>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> Gestion des Utilisateurs</h5>
+                <p class="card-text">Créer, modifier ou supprimer des utilisateurs</p>
+                <a href="{{ url_for('main.users') }}" class="btn btn-light">Gérer</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-file-import"></i> Importer des Utilisateurs</h5>
+                <p class="card-text">Importer des utilisateurs via un fichier CSV</p>
+                <a href="{{ url_for('main.import_users') }}" class="btn btn-light">Importer</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-history"></i> Historique des Actions</h5>
+                <p class="card-text">Voir l'historique des actions critiques</p>
+                <a href="{{ url_for('main.audit_log') }}" class="btn btn-light">Voir</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
