@@ -1,7 +1,8 @@
 # models.py
-from extensions import db  # ✅ Importer db depuis extensions
+from extensions import db
 from sqlalchemy import func
 from flask_login import UserMixin
+import hashlib
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -12,6 +13,12 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(200), nullable=False)
     two_fa_secret = db.Column(db.String(32), nullable=True)
     is_2fa_enabled = db.Column(db.Boolean, default=False)
+
+    def set_password(self, password):
+        self.password = hashlib.sha256(password.encode()).hexdigest()
+
+    def check_password(self, password):
+        return self.password == hashlib.sha256(password.encode()).hexdigest()
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,6 +31,6 @@ class Order(db.Model):
 class AuditLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    action = db.Column(db.String(50), nullable=False)  # Ex: 'CREATE_ORDER'
+    action = db.Column(db.String(50), nullable=False)
     details = db.Column(db.JSON, nullable=True)
     timestamp = db.Column(db.DateTime, default=func.now())
