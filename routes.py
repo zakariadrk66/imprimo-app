@@ -272,3 +272,37 @@ def upload_csv():
             flash(error, 'error')
 
     return redirect(url_for('main.import_users'))
+
+@main.route('/enable-2fa', methods=['GET', 'POST'])
+@login_required
+def enable_2fa():
+    if current_user.role != 'admin':
+        flash('Accès non autorisé', 'error')
+        return redirect(url_for('main.dashboard'))
+
+    if request.method == 'POST':
+        current_user.enable_2fa()
+        db.session.commit()
+        flash('2FA activé avec succès', 'success')
+        return redirect(url_for('main.dashboard'))
+
+    # Générer un QR code pour l'application d'authentification
+    totp_uri = pyotp.totp.TOTP(current_user.two_fa_secret).provisioning_uri(
+        name=current_user.email,
+        issuer_name="Imprimo"
+    )
+    return render_template('admin/enable_2fa.html', totp_uri=totp_uri)
+
+# ✅ Nouvelle route pour désactiver le 2FA
+@main.route('/disable-2fa', methods=['POST'])
+@login_required
+def disable_2fa():
+    if current_user.role != 'admin':
+        flash('Accès non autorisé', 'error')
+        return redirect(url_for('main.dashboard'))
+
+    current_user.is_2fa_enabled = False
+    db.session.commit()
+    flash('2FA désactivé', 'info')
+    return redirect(url_for('main.dashboard'))
+

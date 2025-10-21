@@ -3,6 +3,7 @@ from extensions import db
 from sqlalchemy import func
 from flask_login import UserMixin
 import hashlib
+import pyotp 
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +21,22 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return self.password == hashlib.sha256(password.encode()).hexdigest()
 
+ # ✅ Méthodes pour la gestion du 2FA
+    def enable_2fa(self):
+        if not self.two_fa_secret:
+            self.two_fa_secret = pyotp.random_base32()
+        self.is_2fa_enabled = True
+
+    def verify_2fa(self, token):
+        if not self.is_2fa_enabled or not self.two_fa_secret:
+            return False
+        totp = pyotp.TOTP(self.two_fa_secret)
+        return totp.verify(token)
+
+    # Relations inversées pour Order
+    orders = db.relationship('Order', foreign_keys='Order.user_id', backref='user_obj')
+    created_orders = db.relationship('Order', foreign_keys='Order.agent_id', backref='agent_obj')
+    
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

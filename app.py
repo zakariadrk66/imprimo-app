@@ -4,6 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from config import Config
 from extensions import db
+import logging
+from logging.handlers import RotatingFileHandler
+import os
 
 def create_app():
     app = Flask(__name__)
@@ -34,3 +37,16 @@ if __name__ == '__main__':
         db.create_all()
         print("✅ Tables créées avec succès !")
     app.run(debug=True)
+    
+    # ✅ Configuration des logs
+    if not app.debug and not app.testing:
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        file_handler = RotatingFileHandler('logs/imprimo.log', maxBytes=10240, backupCount=10)
+        file_handler.setFormatter(logging.Formatter(
+            '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+        ))
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+        app.logger.setLevel(logging.INFO)
+        app.logger.info('Application démarrée')

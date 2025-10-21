@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2><i class="fas fa-shield-alt"></i> Activer l'Authentification à Deux Facteurs</h2>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Scanner le QR Code</h5>
+                <p>Scannez ce QR code avec une application d'authentification (Google Authenticator, Authy, etc.)</p>
+                <div class="text-center">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ totp_uri }}" alt="QR Code" />
+                </div>
+                <form method="POST" class="mt-3">
+                    <button type="submit" class="btn btn-success">Activer le 2FA</button>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">Annuler</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Instructions</h5>
+                <ul>
+                    <li>Installez une application d'authentification sur votre téléphone (ex: Google Authenticator).</li>
+                    <li>Scannez le QR code à gauche avec l'application.</li>
+                    <li>Cliquez sur "Activer le 2FA" pour confirmer.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

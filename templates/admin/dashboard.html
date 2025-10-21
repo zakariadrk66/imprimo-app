@@ -37,4 +37,25 @@
         </div>
     </div>
 </div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-shield-alt"></i> 2FA</h5>
+                <p class="card-text">
+                    {% if current_user.is_2fa_enabled %}
+                        <span class="badge bg-success">Activé</span>
+                        <form method="POST" action="{{ url_for('main.disable_2fa') }}" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger">Désactiver</button>
+                        </form>
+                    {% else %}
+                        <span class="badge bg-warning">Désactivé</span>
+                        <a href="{{ url_for('main.enable_2fa') }}" class="btn btn-sm btn-success">Activer</a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
