@@ -45,10 +45,3 @@ def dashboard():
         return render_template('agent/dashboard.html')
     else:
         return render_template('user/dashboard.html')
-
-# Fonction pour charger l'utilisateur (requis par Flask-Login)
-from app import login_manager
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
